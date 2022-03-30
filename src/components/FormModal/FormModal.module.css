@@ -1,5 +1,8 @@
-.modal_header {
+.modalTitle {
+  padding: 10px;
+  color: rgb(239, 252, 0);
   background-color: rgb(37, 75, 199);
+  text-align: center;
 }
 /* .modal_title{
     text-align: center;

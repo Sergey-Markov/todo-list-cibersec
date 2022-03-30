@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
+import { BsXCircle } from "react-icons/bs";
 import { useFormik } from "formik";
 import s from "./FormModal.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -20,9 +21,15 @@ export default function FormModal({ show, setShow }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Header className={s.modal_title} closeButton>
+        {/* <Modal.Header className={s.modal_title} closeButton>
           <Modal.Title className={s.modal_title}>Modal heading</Modal.Title>
-        </Modal.Header>
+        </Modal.Header> */}
+        <div>
+          <h2 className={s.modalTitle}>Enter your Note</h2>
+          <button>
+            <BsXCircle />
+          </button>
+        </div>
         <Modal.Body>
           <form className={s.form_field} onSubmit={formik.handleSubmit}>
             <label htmlFor="noteName">Name of Note</label>
