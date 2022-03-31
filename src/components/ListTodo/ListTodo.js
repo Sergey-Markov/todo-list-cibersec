@@ -1,7 +1,8 @@
 import { Button } from "react-bootstrap";
 import { useFormik, Formik, Field, Form } from "formik";
 import s from "./ListTodo.module.css";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import axios from "axios";
 
 const todosData = [
   { id: 1, title: "what we need to do", completed: false },
@@ -13,8 +14,14 @@ const todosData = [
 ];
 
 export default function ListTodo({ setShow }) {
-  const activeTodos = todosData.filter((todo) => todo.completed === false);
-  const [todos, setTodos] = useState(activeTodos);
+  const [todos, setTodos] = useState([]);
+  const activeTodos = todos.filter((todo) => todo.completed === false);
+
+  useEffect(async () => {
+    const fuck = await axios.get("https://jsonplaceholder.typicode.com/todos");
+    setTodos(fuck.data);
+    console.log(todos);
+  }, []);
 
   const handleShow = () => setShow(true);
   const formik = useFormik({
@@ -105,7 +112,7 @@ export default function ListTodo({ setShow }) {
               key={todo.id}
               style={{ color: todo.completed ? "red" : "black" }}
             >
-              {todo.title}
+              <p>{todo.title}</p>
             </li>
           );
         })}
