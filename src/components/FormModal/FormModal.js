@@ -21,13 +21,10 @@ export default function FormModal({ show, setShow }) {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        {/* <Modal.Header className={s.modal_title} closeButton>
-          <Modal.Title className={s.modal_title}>Modal heading</Modal.Title>
-        </Modal.Header> */}
-        <div>
+        <div className={s.header_modal_field}>
           <h2 className={s.modalTitle}>Enter your Note</h2>
-          <button>
-            <BsXCircle />
+          <button className={s.btn_circle_close} onClick={handleClose}>
+            <BsXCircle className={s.bsXCircle} />
           </button>
         </div>
         <Modal.Body>
@@ -42,7 +39,8 @@ export default function FormModal({ show, setShow }) {
             />
 
             <label htmlFor="text">Text of Note</label>
-            <input
+            <textarea
+              className={s.form_text_input}
               id="text"
               name="text"
               type="text"
@@ -51,7 +49,7 @@ export default function FormModal({ show, setShow }) {
             />
           </form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className={s.modal_footer}>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>

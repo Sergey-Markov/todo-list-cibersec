@@ -1,7 +1,9 @@
 .field {
   text-align: center;
 }
+
 .field_title {
+  position: relative;
   margin: 0 auto;
   padding-top: 100px;
 
@@ -11,11 +13,12 @@
   border-radius: 50%;
   border: 4px solid rgb(37, 75, 199);
 }
-.title_filter {
+.title_field {
   font-size: 50px;
   font-weight: 700;
 }
 .filter_title {
+  display: block;
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 0;
@@ -59,4 +62,25 @@
 .newNote_btn:focus {
   background: rgb(239, 252, 0);
   color: rgb(48, 92, 235);
+}
+.field_list {
+  position: absolute;
+  margin: 0 auto;
+  top: 400px;
+  left: 50%;
+  margin-left: -300px;
+  padding: 30px 20px;
+
+  width: 600px;
+  min-height: 300px;
+  height: auto;
+
+  text-align: start;
+  font-size: 16px;
+  font-weight: 500;
+  word-spacing: normal;
+
+  border-radius: 20%;
+  background: rgb(239, 252, 0);
+  color: black;
 }
