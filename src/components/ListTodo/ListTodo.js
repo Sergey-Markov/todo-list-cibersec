@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useFormik, Formik, Field, Form } from "formik";
 import s from "./ListTodo.module.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const todosData = [
   { id: 1, title: "what we need to do", completed: false },
@@ -13,7 +13,8 @@ const todosData = [
 ];
 
 export default function ListTodo({ setShow }) {
-  const [todos, setTodos] = useState(todosData);
+  const activeTodos = todosData.filter((todo) => todo.completed === false);
+  const [todos, setTodos] = useState(activeTodos);
 
   const handleShow = () => setShow(true);
   const formik = useFormik({
@@ -22,16 +23,33 @@ export default function ListTodo({ setShow }) {
       isCompleted: false,
     },
     onSubmit: (values) => {
-      console.log(values);
-      console.log(todos);
-    },
-    onChange: (values) => {
-      const completedTodo = todos.filter(
-        (todo) => todo.completed === values.isCompleted
+      if (!values.filter) return;
+      const normalizeFilter = values.filter.toLowerCase().trim();
+      const filteredTodos = todos.filter((todo) =>
+        todo.title.toLowerCase().trim().includes(normalizeFilter)
       );
-      setTodos(completedTodo);
+      setTodos(filteredTodos);
+      formik.values.filter = "";
+      document.getElementById("filter").value = "";
     },
   });
+
+  const handleCheck = (e) => {
+    formik.handleChange(e);
+    console.log(typeof e.target.checked);
+    if (e.target.checked) {
+      const completedTodo = todosData.filter(
+        (todo) => todo.completed === e.target.checked
+      );
+      setTodos(completedTodo);
+    } else {
+      setTodos(activeTodos);
+    }
+  };
+  const handleClickResetBtn = () => {
+    setTodos(activeTodos);
+    document.getElementById("checkbox").checked = false;
+  };
 
   return (
     <div className={s.field}>
@@ -49,19 +67,27 @@ export default function ListTodo({ setShow }) {
             onChange={formik.handleChange}
             value={formik.values.filter}
           />
-          <Button type="submit" className={s.filter_btn} variant="primary">
-            Enter
-          </Button>
-
-          <label>
+          <label className={s.checkBoxArchive}>
             Archived
             <input
+              id="checkbox"
               type="checkbox"
               name="isCompleted"
-              onChange={formik.handleChange}
+              onChange={handleCheck}
               value={formik.values.isCompleted}
             />
           </label>
+          <Button
+            type="button"
+            className={s.resetBtn}
+            variant="primary"
+            onClick={handleClickResetBtn}
+          >
+            Reset
+          </Button>
+          <Button type="submit" className={s.filter_btn} variant="primary">
+            Enter
+          </Button>
         </form>
 
         <Button
@@ -72,7 +98,7 @@ export default function ListTodo({ setShow }) {
           Add your Note
         </Button>
       </div>
-      <div className={s.field_list}>
+      <ol className={s.field_list}>
         {todos.map((todo) => {
           return (
             <li
@@ -83,7 +109,7 @@ export default function ListTodo({ setShow }) {
             </li>
           );
         })}
-      </div>
+      </ol>
     </div>
   );
 }
