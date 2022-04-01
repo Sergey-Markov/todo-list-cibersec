@@ -34,7 +34,12 @@
 }
 .checkBoxArchive {
   position: absolute;
-  top: 45%;
+  top: 47%;
+  right: 40px;
+}
+.checkBoxActive {
+  position: absolute;
+  top: 42%;
   right: 40px;
 }
 .resetBtn {

@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import s from "./ListTodo.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 export default function ListTodo({ setShow }) {
@@ -14,40 +14,66 @@ export default function ListTodo({ setShow }) {
         "https://jsonplaceholder.typicode.com/todos"
       );
       setAllTodos(result.data);
-      setTodos(result.data.filter((todo) => todo.completed === false));
+      setTodos(result.data);
     };
     fetchData();
   }, []);
-
-  const activeTodos = allTodos.filter((todo) => todo.completed === false);
-  const archivedTodo = allTodos.filter((todo) => todo.completed === true);
 
   const handleShow = () => setShow(true);
   const formik = useFormik({
     initialValues: {
       filter: "",
+      isActive: false,
       isCompleted: false,
     },
     onSubmit: (values) => {
-      if (!values.filter) return;
+      if (!values.filter && values.isCompleted && !values.isActive) {
+        const filteredTodos = allTodos.filter(
+          (todo) => todo.completed === values.isCompleted
+        );
+        setTodos(filteredTodos);
+        return;
+      }
+      if (!values.filter && values.isActive && values.isCompleted) {
+        // const result = allTodos.filter(
+        //   (todo) => todo.completed === !values.isActive
+        // );
+        setTodos(allTodos);
+        return;
+      }
+      if (!values.filter && values.isActive) {
+        const result = allTodos.filter(
+          (todo) => todo.completed === !values.isActive
+        );
+        setTodos(result);
+        return;
+      }
+
+      if (!values.filter) {
+        setTodos(allTodos);
+        return;
+      }
+
       const normalizeFilter = values.filter.toLowerCase().trim();
-      const filteredTodos = todos.filter((todo) =>
-        todo.title.toLowerCase().trim().includes(normalizeFilter)
-      );
+      const filteredTodos = allTodos.filter((todo) => {
+        return (
+          (todo.title.toLowerCase().trim().includes(normalizeFilter) &&
+            todo.completed === values.isCompleted) ||
+          (todo.title.toLowerCase().trim().includes(normalizeFilter) &&
+            todo.completed !== values.isActive)
+        );
+      });
       setTodos(filteredTodos);
-      formik.values.filter = "";
-      document.getElementById("filter").value = "";
     },
   });
 
-  const handleCheck = (e) => {
-    formik.handleChange(e);
-    console.log(typeof e.target.checked);
-    e.target.checked ? setTodos(archivedTodo) : setTodos(activeTodos);
-  };
   const handleClickResetBtn = () => {
-    setTodos(activeTodos);
-    document.getElementById("checkbox").checked = false;
+    setTodos(allTodos);
+    formik.setValues({
+      isActive: false,
+      isCompleted: false,
+      filter: "",
+    });
   };
 
   return (
@@ -66,14 +92,26 @@ export default function ListTodo({ setShow }) {
             onChange={formik.handleChange}
             value={formik.values.filter}
           />
+          <label className={s.checkBoxActive}>
+            Active
+            <input
+              id="checkbox-active"
+              type="checkbox"
+              name="isActive"
+              onChange={formik.handleChange}
+              checked={formik.values.isActive}
+              value={formik.values.isActive}
+            />
+          </label>
           <label className={s.checkBoxArchive}>
-            Archived
+            Completed
             <input
               id="checkbox"
               type="checkbox"
               name="isCompleted"
-              onChange={handleCheck}
-              value={formik.values.isCompleted}
+              onChange={formik.handleChange}
+              checked={formik.values.isCompleted}
+              // value={formik.values.isCompleted}
             />
           </label>
           <Button
