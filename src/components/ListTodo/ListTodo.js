@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import s from "./ListTodo.module.css";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function ListTodo({ setShow }) {
@@ -26,41 +26,38 @@ export default function ListTodo({ setShow }) {
       isActive: false,
       isCompleted: false,
     },
-    onSubmit: (values) => {
-      if (!values.filter && values.isCompleted && !values.isActive) {
+    onSubmit: ({ filter, isCompleted, isActive }) => {
+      if (!filter && isCompleted && !isActive) {
         const filteredTodos = allTodos.filter(
-          (todo) => todo.completed === values.isCompleted
+          ({ completed }) => completed === isCompleted
         );
         setTodos(filteredTodos);
         return;
       }
-      if (!values.filter && values.isActive && values.isCompleted) {
-        // const result = allTodos.filter(
-        //   (todo) => todo.completed === !values.isActive
-        // );
+      if (!filter && isActive && isCompleted) {
         setTodos(allTodos);
         return;
       }
-      if (!values.filter && values.isActive) {
+      if (!filter && isActive) {
         const result = allTodos.filter(
-          (todo) => todo.completed === !values.isActive
+          ({ completed }) => completed === !isActive
         );
         setTodos(result);
         return;
       }
 
-      if (!values.filter) {
+      if (!filter) {
         setTodos(allTodos);
         return;
       }
 
-      const normalizeFilter = values.filter.toLowerCase().trim();
-      const filteredTodos = allTodos.filter((todo) => {
+      const normalizeFilter = filter.toLowerCase().trim();
+      const filteredTodos = allTodos.filter(({ title, completed }) => {
         return (
-          (todo.title.toLowerCase().trim().includes(normalizeFilter) &&
-            todo.completed === values.isCompleted) ||
-          (todo.title.toLowerCase().trim().includes(normalizeFilter) &&
-            todo.completed !== values.isActive)
+          (title.toLowerCase().trim().includes(normalizeFilter) &&
+            completed === isCompleted) ||
+          (title.toLowerCase().trim().includes(normalizeFilter) &&
+            completed === !isActive)
         );
       });
       setTodos(filteredTodos);
@@ -111,7 +108,6 @@ export default function ListTodo({ setShow }) {
               name="isCompleted"
               onChange={formik.handleChange}
               checked={formik.values.isCompleted}
-              // value={formik.values.isCompleted}
             />
           </label>
           <Button
