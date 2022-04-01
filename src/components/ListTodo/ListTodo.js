@@ -1,5 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useFormik } from "formik";
+import { RiDeleteBin5Line, RiChatQuoteLine } from "react-icons/ri";
+import { MdOutlineDoneAll } from "react-icons/md";
 import s from "./ListTodo.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -137,8 +139,35 @@ export default function ListTodo({ setShow }) {
             <li
               key={todo.id}
               style={{ color: todo.completed ? "red" : "black" }}
+              className={s.list_item_field}
             >
               <p>{todo.title}</p>
+              {/* <div>
+                <Button
+                  type="button"
+                  className={s.ctrlBtn}
+                  variant="primary"
+                  onClick={handleClickResetBtn}
+                >
+                  <RiDeleteBin5Line />
+                </Button>
+                <Button
+                  type="button"
+                  className={s.ctrlBtn}
+                  variant="primary"
+                  onClick={handleClickResetBtn}
+                >
+                  <RiChatQuoteLine />
+                </Button>
+                <Button
+                  type="button"
+                  className={s.ctrlBtn}
+                  variant="primary"
+                  onClick={handleClickResetBtn}
+                >
+                  <MdOutlineDoneAll />
+                </Button>
+              </div> */}
             </li>
           );
         })}

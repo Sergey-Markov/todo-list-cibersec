@@ -109,3 +109,17 @@
   background: rgb(239, 252, 0);
   color: black;
 }
+/* .list_item_field{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+.ctrlBtn {
+  background-color: inherit;
+  border-radius: 50%;
+  border: 4px solid rgb(239, 252, 0);
+
+  color: rgb(25, 26, 23);
+  font-size: 16px;
+  font-weight: 600;
+}
