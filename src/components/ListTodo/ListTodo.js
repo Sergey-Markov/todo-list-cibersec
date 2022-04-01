@@ -1,27 +1,26 @@
 import { Button } from "react-bootstrap";
-import { useFormik, Formik, Field, Form } from "formik";
+import { useFormik } from "formik";
 import s from "./ListTodo.module.css";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-const todosData = [
-  { id: 1, title: "what we need to do", completed: false },
-  { id: 2, title: "what we need to do 2 ", completed: false },
-  { id: 3, title: "what we need to do 3", completed: true },
-  { id: 4, title: "what we need to do 4 ", completed: false },
-  { id: 5, title: "what we need to do 5", completed: true },
-  { id: 6, title: "what we need to do 6", completed: false },
-];
-
 export default function ListTodo({ setShow }) {
+  const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState([]);
-  const activeTodos = todos.filter((todo) => todo.completed === false);
 
-  useEffect(async () => {
-    const fuck = await axios.get("https://jsonplaceholder.typicode.com/todos");
-    setTodos(fuck.data);
-    console.log(todos);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get(
+        "https://jsonplaceholder.typicode.com/todos"
+      );
+      setAllTodos(result.data);
+      setTodos(result.data.filter((todo) => todo.completed === false));
+    };
+    fetchData();
   }, []);
+
+  const activeTodos = allTodos.filter((todo) => todo.completed === false);
+  const archivedTodo = allTodos.filter((todo) => todo.completed === true);
 
   const handleShow = () => setShow(true);
   const formik = useFormik({
@@ -44,14 +43,7 @@ export default function ListTodo({ setShow }) {
   const handleCheck = (e) => {
     formik.handleChange(e);
     console.log(typeof e.target.checked);
-    if (e.target.checked) {
-      const completedTodo = todosData.filter(
-        (todo) => todo.completed === e.target.checked
-      );
-      setTodos(completedTodo);
-    } else {
-      setTodos(activeTodos);
-    }
+    e.target.checked ? setTodos(archivedTodo) : setTodos(activeTodos);
   };
   const handleClickResetBtn = () => {
     setTodos(activeTodos);
