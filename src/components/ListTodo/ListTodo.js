@@ -5,10 +5,14 @@ import { MdOutlineDoneAll } from "react-icons/md";
 import s from "./ListTodo.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import TodoChangeModal from "../todoChangeModal/TodoChangeModal";
 
 export default function ListTodo({ setShow }) {
+  const [open, setOpen] = useState(false);
+
   const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState([]);
+  const [someTodo, setSomeTodo] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +26,7 @@ export default function ListTodo({ setShow }) {
   }, []);
 
   const handleShow = () => setShow(true);
+  const handleOpen = () => setOpen(true);
   const formik = useFormik({
     initialValues: {
       filter: "",
@@ -73,6 +78,24 @@ export default function ListTodo({ setShow }) {
       isCompleted: false,
       filter: "",
     });
+  };
+  const handleClickDeleteBtn = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+    console.log(`id:${id}`);
+  };
+  const handleClickChangeBtn = (id, text) => {
+    console.log(text);
+    if (!text) return;
+    const newArray = todos.map((todo) =>
+      todo.id === id ? { ...todo, title: text } : todo
+    );
+    setTodos(newArray);
+  };
+  const handleClickCompleteBtn = (id) => {
+    const newArray = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(newArray);
   };
 
   return (
@@ -136,18 +159,22 @@ export default function ListTodo({ setShow }) {
       <ol className={s.field_list}>
         {todos.map((todo) => {
           return (
-            <li
-              key={todo.id}
-              style={{ color: todo.completed ? "red" : "black" }}
-              className={s.list_item_field}
-            >
-              <p>{todo.title}</p>
-              {/* <div>
+            <li key={todo.id} className={s.list_item_field}>
+              <p
+                className={
+                  todo.completed ? s.list_item_text : s.list_item_text_completed
+                }
+              >
+                {todo.title}
+              </p>
+              <div>
                 <Button
                   type="button"
                   className={s.ctrlBtn}
                   variant="primary"
-                  onClick={handleClickResetBtn}
+                  onClick={() => {
+                    handleClickDeleteBtn(todo.id);
+                  }}
                 >
                   <RiDeleteBin5Line />
                 </Button>
@@ -155,7 +182,11 @@ export default function ListTodo({ setShow }) {
                   type="button"
                   className={s.ctrlBtn}
                   variant="primary"
-                  onClick={handleClickResetBtn}
+                  onClick={() => {
+                    handleOpen();
+                    setSomeTodo(todo);
+                    // handleClickChangeBtn(todo.id, text);
+                  }}
                 >
                   <RiChatQuoteLine />
                 </Button>
@@ -163,15 +194,23 @@ export default function ListTodo({ setShow }) {
                   type="button"
                   className={s.ctrlBtn}
                   variant="primary"
-                  onClick={handleClickResetBtn}
+                  onClick={() => {
+                    handleClickCompleteBtn(todo.id);
+                  }}
                 >
                   <MdOutlineDoneAll />
                 </Button>
-              </div> */}
+              </div>
             </li>
           );
         })}
       </ol>
+      <TodoChangeModal
+        open={open}
+        setOpen={setOpen}
+        someTodo={someTodo}
+        onSubmitChange={handleClickChangeBtn}
+      />
     </div>
   );
 }
