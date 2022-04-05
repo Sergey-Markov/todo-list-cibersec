@@ -1,8 +1,9 @@
 import s from "./TodoChangeModal.module.css";
+import { useCallback, useEffect, useState } from "react";
+
 import { Button, Modal } from "react-bootstrap";
 import { BsXCircle } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useCallback, useEffect, useState } from "react";
 
 export default function TodoChangeModal({
   open,
@@ -10,24 +11,27 @@ export default function TodoChangeModal({
   someTodo,
   onSubmitChange,
 }) {
-  const handleClose = () => setOpen(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(someTodo?.title);
+
+  const handleClose = () => {
+    setOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     if (someTodo) {
-      setValue(someTodo?.title ? someTodo.title : "");
+      setValue(someTodo?.title || "");
     }
   }, [someTodo]);
 
   const handleSubmit = useCallback(() => {
     onSubmitChange(someTodo?.id, value);
-  }, [someTodo?.id, value, onSubmitChange]);
+  }, [someTodo, value]);
 
   const handleChange = useCallback(
     (e) => {
       setValue(e.target.value);
     },
-    [setValue]
+    [value]
   );
 
   return (
