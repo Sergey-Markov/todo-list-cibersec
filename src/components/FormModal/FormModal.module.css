@@ -15,6 +15,7 @@
   width: auto;
   height: 100px;
   word-wrap: break-word;
+  resize: none;
 }
 .btn_circle_close {
   position: absolute;
