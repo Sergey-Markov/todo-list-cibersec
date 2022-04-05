@@ -2,13 +2,17 @@ import { Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import { RiDeleteBin5Line, RiChatQuoteLine } from "react-icons/ri";
 import { MdOutlineDoneAll } from "react-icons/md";
-import s from "./ListTodo.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import TodoChangeModal from "../todoChangeModal/TodoChangeModal";
 
-export default function ListTodo({ setShow }) {
+import TodoChangeModal from "../todoChangeModal/TodoChangeModal";
+import FormModal from "../FormModal/FormModal";
+
+import s from "./ListTodo.module.css";
+
+export default function ListTodo() {
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
 
   const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState([]);
@@ -24,19 +28,11 @@ export default function ListTodo({ setShow }) {
     };
     fetchData();
   }, []);
-
-  const handleShow = () => setShow(true);
-  const handleOpen = () => setOpen(true);
-  const formik = useFormik({
-    initialValues: {
-      filter: "",
-      isActive: false,
-      isCompleted: false,
-    },
-    onSubmit: ({ filter, isCompleted, isActive }) => {
+  const onSubmit = useCallback(
+    ({ filter, isCompleted, isActive }) => {
       if (!filter && isCompleted && !isActive) {
         const filteredTodos = allTodos.filter(
-          ({ completed }) => completed === isCompleted
+          ({ completed }) => completed === !isCompleted
         );
         setTodos(filteredTodos);
         return;
@@ -47,7 +43,7 @@ export default function ListTodo({ setShow }) {
       }
       if (!filter && isActive) {
         const result = allTodos.filter(
-          ({ completed }) => completed === !isActive
+          ({ completed }) => completed === isActive
         );
         setTodos(result);
         return;
@@ -62,13 +58,24 @@ export default function ListTodo({ setShow }) {
       const filteredTodos = allTodos.filter(({ title, completed }) => {
         return (
           (title.toLowerCase().trim().includes(normalizeFilter) &&
-            completed === isCompleted) ||
+            completed === !isCompleted) ||
           (title.toLowerCase().trim().includes(normalizeFilter) &&
-            completed === !isActive)
+            completed === isActive)
         );
       });
       setTodos(filteredTodos);
     },
+    [allTodos]
+  );
+  const handleShow = () => setShow((prev) => !prev);
+  const handleOpen = () => setOpen(true);
+  const formik = useFormik({
+    initialValues: {
+      filter: "",
+      isActive: false,
+      isCompleted: false,
+    },
+    onSubmit,
   });
 
   const handleClickResetBtn = () => {
@@ -79,24 +86,32 @@ export default function ListTodo({ setShow }) {
       filter: "",
     });
   };
-  const handleClickDeleteBtn = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-    console.log(`id:${id}`);
-  };
-  const handleClickChangeBtn = (id, text) => {
-    if (!text) return;
-    const newArray = todos.map((todo) =>
-      todo.id === id ? { ...todo, title: text } : todo
-    );
-    setTodos(newArray);
-  };
-  const handleClickCompleteBtn = (id) => {
-    const newArray = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-    setTodos(newArray);
-  };
-
+  const handleClickDeleteBtn = useCallback(
+    (id) => {
+      setTodos(todos.filter((todo) => todo.id !== id));
+      console.log(`id:${id}`);
+    },
+    [todos]
+  );
+  const handleClickChangeBtn = useCallback(
+    (id, text) => {
+      if (!text) return;
+      const newArray = todos.map((todo) =>
+        todo.id === id ? { ...todo, title: text } : todo
+      );
+      setTodos(newArray);
+    },
+    [todos]
+  );
+  const handleClickCompleteBtn = useCallback(
+    (id) => {
+      const newArray = todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      setTodos(newArray);
+    },
+    [todos]
+  );
   return (
     <div className={s.field}>
       <div className={s.field_title}>
@@ -210,6 +225,7 @@ export default function ListTodo({ setShow }) {
         someTodo={someTodo}
         onSubmitChange={handleClickChangeBtn}
       />
+      <FormModal show={show} setShow={handleShow} setAllTodos={setTodos} />
     </div>
   );
 }

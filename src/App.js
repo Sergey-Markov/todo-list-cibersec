@@ -1,6 +1,6 @@
 // import "./App.css";
-import { useState } from "react";
-import FormModal from "./components/FormModal/FormModal";
+// import { useState } from "react";
+// import FormModal from "./components/FormModal/FormModal";
 import { Homepage } from "./components/Homepage";
 import { ListTodo } from "./components/ListTodo";
 
@@ -12,13 +12,10 @@ import { ListTodo } from "./components/ListTodo";
 //                    2)checkbox in todo complete and no
 
 function App() {
-  const [show, setShow] = useState(false);
-
   return (
     <div>
       {/* <Homepage setShow={setShow} /> */}
-      <ListTodo setShow={setShow} />
-      <FormModal show={show} setShow={setShow} />
+      <ListTodo />
     </div>
   );
 }
