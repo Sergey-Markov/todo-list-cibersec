@@ -12,7 +12,7 @@ export default function ListTodo({ setShow }) {
 
   const [allTodos, setAllTodos] = useState([]);
   const [todos, setTodos] = useState([]);
-  const [someTodo, setSomeTodo] = useState({});
+  const [someTodo, setSomeTodo] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +84,6 @@ export default function ListTodo({ setShow }) {
     console.log(`id:${id}`);
   };
   const handleClickChangeBtn = (id, text) => {
-    console.log(text);
     if (!text) return;
     const newArray = todos.map((todo) =>
       todo.id === id ? { ...todo, title: text } : todo

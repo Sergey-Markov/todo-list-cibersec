@@ -1,9 +1,8 @@
 import s from "./TodoChangeModal.module.css";
 import { Button, Modal } from "react-bootstrap";
-import { useFormik } from "formik";
 import { BsXCircle } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function TodoChangeModal({
   open,
@@ -12,19 +11,24 @@ export default function TodoChangeModal({
   onSubmitChange,
 }) {
   const handleClose = () => setOpen(false);
-
-  const formik = useFormik({
-    initialValues: {
-      title: someTodo.title,
-    },
-  });
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     if (someTodo) {
-      formik.setFieldValue("title", someTodo.title);
+      setValue(someTodo?.title ? someTodo.title : "");
     }
   }, [someTodo]);
-  //   if (someTodo?.title) formik.setFieldValue("title", someTodo.title);
+
+  const handleSubmit = useCallback(() => {
+    onSubmitChange(someTodo?.id, value);
+  }, [someTodo?.id, value, onSubmitChange]);
+
+  const handleChange = useCallback(
+    (e) => {
+      setValue(e.target.value);
+    },
+    [setValue]
+  );
 
   return (
     <>
@@ -36,15 +40,15 @@ export default function TodoChangeModal({
           </button>
         </div>
         <Modal.Body>
-          <form className={s.form_field} onSubmit={formik.handleSubmit}>
+          <form htmlFor="title" className={s.form_field}>
             <textarea
               className={s.form_text_input}
               id="title"
               name="title"
               type="text"
-              onChange={formik.handleChange}
+              onChange={handleChange}
               placeholder="Your text"
-              value={formik.values.title}
+              value={value}
             />
           </form>
         </Modal.Body>
@@ -55,9 +59,8 @@ export default function TodoChangeModal({
           <Button
             variant="primary"
             onClick={() => {
-              onSubmitChange(someTodo.id, formik.values.title);
+              handleSubmit();
               handleClose();
-              formik.setFieldValue("title", "");
             }}
           >
             Save Changes
