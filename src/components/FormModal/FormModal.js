@@ -1,28 +1,45 @@
 import { Button, Modal } from "react-bootstrap";
 import { BsXCircle } from "react-icons/bs";
 import { useFormik } from "formik";
-import s from "./FormModal.module.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useCallback } from "react";
 
-export default function FormModal({ show, setShow }) {
-  const handleClose = () => setShow(false);
+import shortid from "shortid";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import s from "./FormModal.module.css";
+
+export default function FormModal({ show, setShow, setAllTodos }) {
+  const onSubmit = useCallback((values) => {
+    const newTodo = {
+      userId: shortid.generate(),
+      id: shortid.generate(),
+      noteName: values.noteName,
+      title: values.text,
+      completed: false,
+    };
+
+    setAllTodos((prevState) => {
+      return [newTodo, ...prevState];
+    });
+    setShow();
+    formik.setFieldValue("text", "");
+    formik.setFieldValue("noteName", "");
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       noteName: "",
       text: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit,
   });
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={setShow}>
         <div className={s.header_modal_field}>
           <h2 className={s.modalTitle}>Enter your Note</h2>
-          <button className={s.btn_circle_close} onClick={handleClose}>
+          <button className={s.btn_circle_close} onClick={setShow}>
             <BsXCircle className={s.bsXCircle} />
           </button>
         </div>
@@ -33,6 +50,7 @@ export default function FormModal({ show, setShow }) {
               id="noteName"
               name="noteName"
               type="text"
+              placeholder="Enter name of Note"
               onChange={formik.handleChange}
               value={formik.values.noteName}
             />
@@ -43,22 +61,17 @@ export default function FormModal({ show, setShow }) {
               id="text"
               name="text"
               type="text"
+              placeholder="Enter your text"
               onChange={formik.handleChange}
               value={formik.values.text}
             />
           </form>
         </Modal.Body>
         <Modal.Footer className={s.modal_footer}>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={setShow}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              formik.handleSubmit();
-              handleClose();
-            }}
-          >
+          <Button variant="primary" onClick={formik.handleSubmit}>
             Save Changes
           </Button>
         </Modal.Footer>
