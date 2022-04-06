@@ -2,39 +2,28 @@ import { Button } from "react-bootstrap";
 import { useFormik } from "formik";
 import { RiDeleteBin5Line, RiChatQuoteLine } from "react-icons/ri";
 import { MdOutlineDoneAll } from "react-icons/md";
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { useState, useCallback } from "react";
 
 import TodoChangeModal from "../todoChangeModal/TodoChangeModal";
 import FormModal from "../FormModal/FormModal";
 
 import s from "./ListTodo.module.css";
+import { useTodos } from "../../utils/hooks/useTodos";
 
 export default function ListTodo() {
+  const { todos, allTodos, setTodos } = useTodos();
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
-
-  const [allTodos, setAllTodos] = useState([]);
-  const [todos, setTodos] = useState([]);
   const [someTodo, setSomeTodo] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(
-        "https://jsonplaceholder.typicode.com/todos"
-      );
-      setAllTodos(result.data);
-      setTodos(result.data);
-    };
-    fetchData();
-  }, []);
   const onSubmit = useCallback(
     ({ filter, isCompleted, isActive }) => {
       if (!filter && isCompleted && !isActive) {
         const filteredTodos = allTodos.filter(
-          ({ completed }) => completed === !isCompleted
+          ({ completed }) => completed === isCompleted
         );
         setTodos(filteredTodos);
+        debugger;
         return;
       }
       if (!filter && isActive && isCompleted) {
@@ -43,7 +32,7 @@ export default function ListTodo() {
       }
       if (!filter && isActive) {
         const result = allTodos.filter(
-          ({ completed }) => completed === isActive
+          ({ completed }) => completed === !isActive
         );
         setTodos(result);
         return;
@@ -58,9 +47,9 @@ export default function ListTodo() {
       const filteredTodos = allTodos.filter(({ title, completed }) => {
         return (
           (title.toLowerCase().trim().includes(normalizeFilter) &&
-            completed === !isCompleted) ||
+            completed === isCompleted) ||
           (title.toLowerCase().trim().includes(normalizeFilter) &&
-            completed === isActive)
+            completed === !isActive)
         );
       });
       setTodos(filteredTodos);
@@ -176,7 +165,9 @@ export default function ListTodo() {
             <li key={todo.id} className={s.list_item_field}>
               <p
                 className={
-                  todo.completed ? s.list_item_text : s.list_item_text_completed
+                  !todo.completed
+                    ? s.list_item_text
+                    : s.list_item_text_completed
                 }
               >
                 {todo.title}
