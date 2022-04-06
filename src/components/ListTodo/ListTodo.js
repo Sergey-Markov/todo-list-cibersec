@@ -1,17 +1,15 @@
-import { Button } from "react-bootstrap";
-import { useFormik } from "formik";
-import { RiDeleteBin5Line, RiChatQuoteLine } from "react-icons/ri";
-import { MdOutlineDoneAll } from "react-icons/md";
 import { useState, useCallback } from "react";
+import { useTodos } from "../../utils/hooks/useTodos";
+import { useFormik } from "formik";
 
 import TodoChangeModal from "../todoChangeModal/TodoChangeModal";
 import FormModal from "../FormModal/FormModal";
+import { TodoEdit } from "../TodoEdit";
+import RenderListTodo from "../RenderListTodo/RenderListTodo";
 
 import s from "./ListTodo.module.css";
-import { useTodos } from "../../utils/hooks/useTodos";
 
-export default function ListTodo() {
-  // change export and make it arrow function
+const ListTodo = () => {
   const { todos, allTodos, setTodos } = useTodos();
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
@@ -108,113 +106,19 @@ export default function ListTodo() {
     [todos]
   );
   return (
-    // to components
     <div className={s.field}>
-      <div className={s.field_title}>
-        <p className={s.title_field}>Your List</p>
-        <form className={s.form_field} onSubmit={formik.handleSubmit}>
-          <label htmlFor="filter" className={s.filter_title}>
-            Filter:
-          </label>
-          <input
-            className={s.filter_input}
-            id="filter"
-            name="filter"
-            type="filter"
-            onChange={formik.handleChange}
-            value={formik.values.filter}
-          />
-          <label className={s.checkBoxActive}>
-            Active
-            <input
-              id="checkbox-active"
-              type="checkbox"
-              name="isActive"
-              onChange={formik.handleChange}
-              checked={formik.values.isActive}
-              value={formik.values.isActive}
-            />
-          </label>
-          <label className={s.checkBoxArchive}>
-            Completed
-            <input
-              id="checkbox"
-              type="checkbox"
-              name="isCompleted"
-              onChange={formik.handleChange}
-              checked={formik.values.isCompleted}
-            />
-          </label>
-          <Button
-            type="button"
-            className={s.resetBtn}
-            variant="primary"
-            onClick={handleClickResetBtn}
-          >
-            Reset
-          </Button>
-          <Button type="submit" className={s.filter_btn} variant="primary">
-            Enter
-          </Button>
-        </form>
-
-        <Button
-          className={s.newNote_btn}
-          variant="primary"
-          onClick={handleShow}
-        >
-          Add your Note
-        </Button>
-      </div>
-      <ol className={s.field_list}>
-        {todos.map((todo) => {
-          return (
-            <li key={todo.id} className={s.list_item_field}>
-              <p
-                className={
-                  !todo.completed // to constant
-                    ? s.list_item_text
-                    : s.list_item_text_completed
-                }
-              >
-                {todo.title}
-              </p>
-              <div>
-                <Button
-                  type="button"
-                  className={s.ctrlBtn}
-                  variant="primary"
-                  onClick={() => {
-                    handleClickDeleteBtn(todo.id);
-                  }}
-                >
-                  <RiDeleteBin5Line />
-                </Button>
-                <Button
-                  type="button"
-                  className={s.ctrlBtn}
-                  variant="primary"
-                  onClick={() => {
-                    toggleModal();
-                    setSomeTodo(todo); // to one func and useCallback
-                    // handleClickChangeBtn(todo.id, text);
-                  }}
-                >
-                  <RiChatQuoteLine />
-                </Button>
-                <Button
-                  type="button"
-                  className={s.ctrlBtn}
-                  variant="primary"
-                  onClick={() => handleClickCompleteBtn(todo.id)}
-                >
-                  <MdOutlineDoneAll />
-                </Button>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+      <TodoEdit
+        formik={formik}
+        handleClickResetBtn={handleClickResetBtn}
+        handleShow={handleShow}
+      />
+      <RenderListTodo
+        todos={todos}
+        handleClickDeleteBtn={handleClickDeleteBtn}
+        toggleModal={toggleModal}
+        setSomeTodo={setSomeTodo}
+        handleClickCompleteBtn={handleClickCompleteBtn}
+      />
       <TodoChangeModal
         open={open}
         toggleModal={toggleModal}
@@ -224,4 +128,5 @@ export default function ListTodo() {
       <FormModal show={show} setShow={handleShow} setAllTodos={setTodos} />
     </div>
   );
-}
+};
+export default ListTodo;
