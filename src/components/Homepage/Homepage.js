@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import s from "./Homepage.module.css";
 
-export default function Homepage() {
-  // Change to const HomePage = () => { ...}
+const Homepage = () => {
   return (
     <section>
       <div className={s.field}>
@@ -19,4 +18,5 @@ export default function Homepage() {
       </div>
     </section>
   );
-}
+};
+export default Homepage;
