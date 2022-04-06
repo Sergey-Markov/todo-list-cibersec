@@ -11,6 +11,7 @@ import s from "./ListTodo.module.css";
 import { useTodos } from "../../utils/hooks/useTodos";
 
 export default function ListTodo() {
+  // change export and make it arrow function
   const { todos, allTodos, setTodos } = useTodos();
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
@@ -19,18 +20,21 @@ export default function ListTodo() {
   const onSubmit = useCallback(
     ({ filter, isCompleted, isActive }) => {
       if (!filter && isCompleted && !isActive) {
+        // to constant
         const filteredTodos = allTodos.filter(
           ({ completed }) => completed === isCompleted
         );
         setTodos(filteredTodos);
-        debugger;
+
         return;
       }
       if (!filter && isActive && isCompleted) {
+        // to constant
         setTodos(allTodos);
         return;
       }
       if (!filter && isActive) {
+        // to constant
         const result = allTodos.filter(
           ({ completed }) => completed === !isActive
         );
@@ -45,11 +49,12 @@ export default function ListTodo() {
 
       const normalizeFilter = filter.toLowerCase().trim();
       const filteredTodos = allTodos.filter(({ title, completed }) => {
+        const normalizeTitle = title.toLowerCase().trim();
         return (
-          (title.toLowerCase().trim().includes(normalizeFilter) &&
+          // to constants
+          (normalizeTitle.includes(normalizeFilter) &&
             completed === isCompleted) ||
-          (title.toLowerCase().trim().includes(normalizeFilter) &&
-            completed === !isActive)
+          (normalizeTitle.includes(normalizeFilter) && completed === !isActive)
         );
       });
       setTodos(filteredTodos);
@@ -57,7 +62,9 @@ export default function ListTodo() {
     [allTodos]
   );
   const handleShow = () => setShow((prev) => !prev);
-  const handleOpen = () => setOpen(true);
+  const toggleModal = () => {
+    setOpen((prev) => !prev);
+  };
   const formik = useFormik({
     initialValues: {
       filter: "",
@@ -78,7 +85,6 @@ export default function ListTodo() {
   const handleClickDeleteBtn = useCallback(
     (id) => {
       setTodos(todos.filter((todo) => todo.id !== id));
-      console.log(`id:${id}`);
     },
     [todos]
   );
@@ -102,6 +108,7 @@ export default function ListTodo() {
     [todos]
   );
   return (
+    // to components
     <div className={s.field}>
       <div className={s.field_title}>
         <p className={s.title_field}>Your List</p>
@@ -165,7 +172,7 @@ export default function ListTodo() {
             <li key={todo.id} className={s.list_item_field}>
               <p
                 className={
-                  !todo.completed
+                  !todo.completed // to constant
                     ? s.list_item_text
                     : s.list_item_text_completed
                 }
@@ -188,8 +195,8 @@ export default function ListTodo() {
                   className={s.ctrlBtn}
                   variant="primary"
                   onClick={() => {
-                    handleOpen();
-                    setSomeTodo(todo);
+                    toggleModal();
+                    setSomeTodo(todo); // to one func and useCallback
                     // handleClickChangeBtn(todo.id, text);
                   }}
                 >
@@ -199,9 +206,7 @@ export default function ListTodo() {
                   type="button"
                   className={s.ctrlBtn}
                   variant="primary"
-                  onClick={() => {
-                    handleClickCompleteBtn(todo.id);
-                  }}
+                  onClick={() => handleClickCompleteBtn(todo.id)}
                 >
                   <MdOutlineDoneAll />
                 </Button>
@@ -212,7 +217,7 @@ export default function ListTodo() {
       </ol>
       <TodoChangeModal
         open={open}
-        setOpen={setOpen}
+        toggleModal={toggleModal}
         someTodo={someTodo}
         onSubmitChange={handleClickChangeBtn}
       />

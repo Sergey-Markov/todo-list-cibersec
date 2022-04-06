@@ -7,15 +7,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function TodoChangeModal({
   open,
-  setOpen,
+  toggleModal,
   someTodo,
   onSubmitChange,
 }) {
   const [value, setValue] = useState(someTodo?.title);
-
-  const handleClose = () => {
-    setOpen((prev) => !prev);
-  };
 
   useEffect(() => {
     if (someTodo) {
@@ -35,42 +31,40 @@ export default function TodoChangeModal({
   );
 
   return (
-    <>
-      <Modal show={open} onHide={handleClose}>
-        <div className={s.header_modal_field}>
-          <h2 className={s.modalTitle}>Change text of Note</h2>
-          <button className={s.btn_circle_close} onClick={handleClose}>
-            <BsXCircle className={s.bsXCircle} />
-          </button>
-        </div>
-        <Modal.Body>
-          <form htmlFor="title" className={s.form_field}>
-            <textarea
-              className={s.form_text_input}
-              id="title"
-              name="title"
-              type="text"
-              onChange={handleChange}
-              placeholder="Your text"
-              value={value}
-            />
-          </form>
-        </Modal.Body>
-        <Modal.Footer className={s.modal_footer}>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              handleSubmit();
-              handleClose();
-            }}
-          >
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Modal show={open} onHide={toggleModal}>
+      <div className={s.header_modal_field}>
+        <h2 className={s.modalTitle}>Change text of Note</h2>
+        <button className={s.btn_circle_close} onClick={toggleModal}>
+          <BsXCircle className={s.bsXCircle} />
+        </button>
+      </div>
+      <Modal.Body>
+        <form htmlFor="title" className={s.form_field}>
+          <textarea
+            className={s.form_text_input}
+            id="title"
+            name="title"
+            type="text"
+            onChange={handleChange}
+            placeholder="Your text"
+            value={value}
+          />
+        </form>
+      </Modal.Body>
+      <Modal.Footer className={s.modal_footer}>
+        <Button variant="secondary" onClick={toggleModal}>
+          Close
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => {
+            handleSubmit(); // declarate function with useCallback
+            toggleModal();
+          }}
+        >
+          Save Changes
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }

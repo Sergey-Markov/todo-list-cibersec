@@ -21,7 +21,7 @@ export default function FormModal({ show, setShow, setAllTodos }) {
       return [newTodo, ...prevState];
     });
     setShow();
-    formik.setFieldValue("text", "");
+    formik.setFieldValue("text", ""); // to setValues(...)
     formik.setFieldValue("noteName", "");
   }, []);
 
@@ -34,47 +34,45 @@ export default function FormModal({ show, setShow, setAllTodos }) {
   });
 
   return (
-    <>
-      <Modal show={show} onHide={setShow}>
-        <div className={s.header_modal_field}>
-          <h2 className={s.modalTitle}>Enter your Note</h2>
-          <button className={s.btn_circle_close} onClick={setShow}>
-            <BsXCircle className={s.bsXCircle} />
-          </button>
-        </div>
-        <Modal.Body>
-          <form className={s.form_field} onSubmit={formik.handleSubmit}>
-            <label htmlFor="noteName">Name of Note</label>
-            <input
-              id="noteName"
-              name="noteName"
-              type="text"
-              placeholder="Enter name of Note"
-              onChange={formik.handleChange}
-              value={formik.values.noteName}
-            />
+    <Modal show={show} onHide={setShow}>
+      <div className={s.header_modal_field}>
+        <h2 className={s.modalTitle}>Enter your Note</h2>
+        <button className={s.btn_circle_close} onClick={setShow}>
+          <BsXCircle className={s.bsXCircle} />
+        </button>
+      </div>
+      <Modal.Body>
+        <form className={s.form_field} onSubmit={formik.handleSubmit}>
+          <label htmlFor="noteName">Name of Note</label>
+          <input
+            id="noteName"
+            name="noteName"
+            type="text"
+            placeholder="Enter name of Note"
+            onChange={formik.handleChange}
+            value={formik.values.noteName}
+          />
 
-            <label htmlFor="text">Text of Note</label>
-            <textarea
-              className={s.form_text_input}
-              id="text"
-              name="text"
-              type="text"
-              placeholder="Enter your text"
-              onChange={formik.handleChange}
-              value={formik.values.text}
-            />
-          </form>
-        </Modal.Body>
-        <Modal.Footer className={s.modal_footer}>
-          <Button variant="secondary" onClick={setShow}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={formik.handleSubmit}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+          <label htmlFor="text">Text of Note</label>
+          <textarea
+            className={s.form_text_input}
+            id="text"
+            name="text"
+            type="text"
+            placeholder="Enter your text"
+            onChange={formik.handleChange}
+            value={formik.values.text}
+          />
+        </form>
+      </Modal.Body>
+      <Modal.Footer className={s.modal_footer}>
+        <Button variant="secondary" onClick={setShow}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={formik.handleSubmit}>
+          Save Changes
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
