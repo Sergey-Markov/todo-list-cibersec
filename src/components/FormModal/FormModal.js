@@ -5,7 +5,6 @@ import { useCallback } from "react";
 
 import shortid from "shortid";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import s from "./FormModal.module.css";
 
 export default function FormModal({ show, setShow, setAllTodos }) {
