@@ -11,6 +11,8 @@ const RenderListTodo = ({
   setSomeTodo,
   handleClickCompleteBtn,
 }) => {
+  const activeStyleClassTodo = s.list_item_text;
+  const completedStyleClassTodo = s.list_item_text_completed;
   return (
     <ol className={s.field_list}>
       {todos.map((todo) => {
@@ -18,9 +20,7 @@ const RenderListTodo = ({
           <li key={todo.id} className={s.list_item_field}>
             <p
               className={
-                !todo.completed // to constant
-                  ? s.list_item_text
-                  : s.list_item_text_completed
+                !todo.completed ? activeStyleClassTodo : completedStyleClassTodo
               }
             >
               {todo.title}
@@ -43,7 +43,6 @@ const RenderListTodo = ({
                 onClick={() => {
                   toggleModal();
                   setSomeTodo(todo); // to one func and useCallback
-                  // handleClickChangeBtn(todo.id, text);
                 }}
               >
                 <RiChatQuoteLine />
