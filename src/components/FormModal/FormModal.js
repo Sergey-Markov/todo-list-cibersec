@@ -7,7 +7,7 @@ import shortid from "shortid";
 
 import s from "./FormModal.module.css";
 
-export default function FormModal({ show, setShow, setAllTodos }) {
+const FormModal = ({ show, setShow, setAllTodos }) => {
   const onSubmit = useCallback((values) => {
     const newTodo = {
       userId: shortid.generate(),
@@ -21,8 +21,7 @@ export default function FormModal({ show, setShow, setAllTodos }) {
       return [newTodo, ...prevState];
     });
     setShow();
-    formik.setFieldValue("text", ""); // to setValues(...)
-    formik.setFieldValue("noteName", "");
+    formik.setValues({ text: "", noteName: "" });
   }, []);
 
   const formik = useFormik({
@@ -75,4 +74,5 @@ export default function FormModal({ show, setShow, setAllTodos }) {
       </Modal.Footer>
     </Modal>
   );
-}
+};
+export default FormModal;
