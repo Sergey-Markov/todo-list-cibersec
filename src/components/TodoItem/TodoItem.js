@@ -5,8 +5,6 @@ import { MdOutlineDoneAll } from "react-icons/md";
 import s from "./TodoItem.module.css";
 const TodoItem = ({
   todo,
-  toggleModal,
-  setSomeTodo,
   handleClickCompleteBtn,
   handleChangeTextTodoBtn,
   handleClickDeleteBtn,
@@ -26,7 +24,6 @@ const TodoItem = ({
         <Button
           type="button"
           className={s.ctrlBtn}
-          variant="primary"
           onClick={() => {
             handleClickDeleteBtn(todo.id);
           }}
@@ -36,7 +33,6 @@ const TodoItem = ({
         <Button
           type="button"
           className={s.ctrlBtn}
-          variant="primary"
           onClick={() => handleChangeTextTodoBtn(todo)}
         >
           <RiChatQuoteLine />
@@ -44,7 +40,6 @@ const TodoItem = ({
         <Button
           type="button"
           className={s.ctrlBtn}
-          variant="primary"
           onClick={() => handleClickCompleteBtn(todo.id)}
         >
           <MdOutlineDoneAll />

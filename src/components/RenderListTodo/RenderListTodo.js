@@ -1,4 +1,5 @@
 import TodoItem from "../TodoItem/TodoItem";
+import shortid from "shortid";
 
 import s from "./RenderListTodo.module.css";
 
@@ -15,6 +16,7 @@ const RenderListTodo = ({
       {todos.map((todo) => {
         return (
           <TodoItem
+            key={shortid.generate()}
             todo={todo}
             handleClickDeleteBtn={handleClickDeleteBtn}
             handleClickCompleteBtn={handleClickCompleteBtn}
