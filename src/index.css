@@ -19,14 +19,18 @@ code {
 .nav-link:hover {
   color: rgb(0, 255, 238);
 }
+.nav-link:focus {
+  color: rgb(4, 4, 4);
+}
+
 .dropdown-menu-dark {
   color: #dee2e6;
   background-color: transparent;
   border: none;
 }
-/* div.dropdown-menu.show.dropdown-menu-dark {
+div.dropdown-menu.show.dropdown-menu-dark {
   position: absolute;
   top: 3px !important;
-  left: -50% !important;
+  left: -20% !important;
   transform: translate(0px, 39px);
-} */
+}

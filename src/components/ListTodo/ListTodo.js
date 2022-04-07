@@ -8,7 +8,6 @@ import { TodoEdit } from "../TodoEdit";
 import RenderListTodo from "../RenderListTodo/RenderListTodo";
 
 import s from "./ListTodo.module.css";
-import Menu from "../Menu/Menu";
 
 const ListTodo = () => {
   const { todos, allTodos, setTodos } = useTodos();
@@ -131,7 +130,7 @@ const ListTodo = () => {
         someTodo={someTodo}
         onSubmitChange={handleClickChangeBtn}
       />
-      <Menu />
+
       <FormModal show={show} setShow={handleShow} setAllTodos={setTodos} />
     </div>
   );

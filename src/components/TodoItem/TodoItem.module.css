@@ -2,10 +2,38 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+
+  border: 2px solid rgb(117, 114, 114);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  box-shadow: 5px 5px 5px 1px rgba(204, 238, 11, 0.59);
+  border-radius: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  transition-property: all;
+  transition-duration: 300ms;
 }
 .list_item_field::before {
   counter-increment: section;
   content: "" counter(section) ") ";
+}
+.list_item_field:focus,
+.list_item_field:hover {
+  box-shadow: none;
+  color: black;
+  background: rgb(251, 255, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(251, 255, 0, 1) 0%,
+    rgba(0, 144, 254, 1) 100%
+  );
+  transform: scale(1.2);
+}
+
+.list_item_field:not(:last-child) {
+  margin-bottom: 5px;
 }
 .list_item_text {
   text-decoration: none;

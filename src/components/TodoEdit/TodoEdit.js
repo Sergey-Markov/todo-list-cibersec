@@ -6,6 +6,7 @@ import s from "./TodoEdit.module.css";
 const TodoEdit = ({ formik, handleClickResetBtn, handleShow }) => {
   return (
     <div className={s.field_title}>
+      <Menu />
       <p className={s.title_field}>Your List</p>
       <form className={s.form_field} onSubmit={formik.handleSubmit}>
         <label htmlFor="filter" className={s.filter_title}>
