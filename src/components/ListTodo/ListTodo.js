@@ -105,6 +105,10 @@ const ListTodo = () => {
     },
     [todos]
   );
+  const handleChangeTextTodoBtn = useCallback((todo) => {
+    toggleModal();
+    setSomeTodo(todo);
+  }, []);
   return (
     <div className={s.field}>
       <TodoEdit
@@ -118,6 +122,7 @@ const ListTodo = () => {
         toggleModal={toggleModal}
         setSomeTodo={setSomeTodo}
         handleClickCompleteBtn={handleClickCompleteBtn}
+        handleChangeTextTodoBtn={handleChangeTextTodoBtn}
       />
       <TodoChangeModal
         open={open}

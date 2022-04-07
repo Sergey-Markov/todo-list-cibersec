@@ -1,14 +1,12 @@
 .field_list {
-  position: absolute;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   counter-reset: section;
   list-style-type: none;
-  top: 400px;
-  left: 50%;
-  margin-left: -450px;
-  padding: 30px 60px;
+  padding: 20px;
 
   width: 900px;
+  max-width: 900px;
+  min-width: 320px;
   min-height: 300px;
   height: auto;
 

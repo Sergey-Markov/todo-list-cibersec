@@ -1,53 +1,8 @@
 .field {
   text-align: center;
-}
-
-.field_list {
-  position: absolute;
-  margin: 0 auto;
-  counter-reset: section;
-  list-style-type: none;
-  top: 400px;
-  left: 50%;
-  margin-left: -450px;
-  padding: 30px 60px;
-
-  width: 900px;
-  min-height: 300px;
-  height: auto;
-
-  text-align: start;
-  font-size: 16px;
-  font-weight: 500;
-  word-spacing: normal;
-
-  border-radius: 20px;
-  background: rgb(239, 252, 0);
-  color: black;
-}
-.list_item_field {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.list_item_field::before {
-  counter-increment: section;
-  content: "" counter(section) ") ";
-}
-.list_item_text {
-  text-decoration: none;
-  color: black;
-}
-.list_item_text_completed {
-  text-decoration: line-through;
-  color: red;
-}
-.ctrlBtn {
-  background-color: inherit;
-  border-radius: 50%;
-  border: 4px solid rgb(239, 252, 0);
-
-  color: rgb(25, 26, 23);
-  font-size: 16px;
-  font-weight: 600;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
 }

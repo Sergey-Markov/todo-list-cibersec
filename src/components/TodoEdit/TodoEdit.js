@@ -19,22 +19,24 @@ const TodoEdit = ({ formik, handleClickResetBtn, handleShow }) => {
           value={formik.values.filter}
         />
         <label className={s.checkBoxActive}>
-          Active
+          <span className={s.checkBoxTitleActive}>Active</span>
           <input
             id="checkbox-active"
             type="checkbox"
             name="isActive"
+            className={s.inputCheckbox}
             onChange={formik.handleChange}
             checked={formik.values.isActive}
             value={formik.values.isActive}
           />
         </label>
         <label className={s.checkBoxArchive}>
-          Completed
+          <span className={s.checkBoxTitleArchive}>Completed</span>
           <input
             id="checkbox"
             type="checkbox"
             name="isCompleted"
+            className={s.inputCheckbox}
             onChange={formik.handleChange}
             checked={formik.values.isCompleted}
           />

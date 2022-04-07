@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import { RiDeleteBin5Line, RiChatQuoteLine } from "react-icons/ri";
 import { MdOutlineDoneAll } from "react-icons/md";
@@ -10,9 +11,11 @@ const RenderListTodo = ({
   toggleModal,
   setSomeTodo,
   handleClickCompleteBtn,
+  handleChangeTextTodoBtn,
 }) => {
   const activeStyleClassTodo = s.list_item_text;
   const completedStyleClassTodo = s.list_item_text_completed;
+
   return (
     <ol className={s.field_list}>
       {todos.map((todo) => {
@@ -40,10 +43,7 @@ const RenderListTodo = ({
                 type="button"
                 className={s.ctrlBtn}
                 variant="primary"
-                onClick={() => {
-                  toggleModal();
-                  setSomeTodo(todo); // to one func and useCallback
-                }}
+                onClick={() => handleChangeTextTodoBtn(todo)}
               >
                 <RiChatQuoteLine />
               </Button>
