@@ -17,22 +17,22 @@ const ListTodo = () => {
 
   const onSubmit = useCallback(
     ({ filter, isCompleted, isActive }) => {
-      if (!filter && isCompleted && !isActive) {
-        // to constant
+      const filteredTodosForWordCompleted = !filter && isCompleted && !isActive;
+      const filteredTodosForWord = !filter && isActive && isCompleted;
+      const filteredTodosForWordActive = !filter && isActive;
+
+      if (filteredTodosForWordCompleted) {
         const filteredTodos = allTodos.filter(
           ({ completed }) => completed === isCompleted
         );
         setTodos(filteredTodos);
-
         return;
       }
-      if (!filter && isActive && isCompleted) {
-        // to constant
+      if (filteredTodosForWord) {
         setTodos(allTodos);
         return;
       }
-      if (!filter && isActive) {
-        // to constant
+      if (filteredTodosForWordActive) {
         const result = allTodos.filter(
           ({ completed }) => completed === !isActive
         );
@@ -46,14 +46,14 @@ const ListTodo = () => {
       }
 
       const normalizeFilter = filter.toLowerCase().trim();
+
       const filteredTodos = allTodos.filter(({ title, completed }) => {
         const normalizeTitle = title.toLowerCase().trim();
-        return (
-          // to constants
+        const allCheckboxMarked =
           (normalizeTitle.includes(normalizeFilter) &&
             completed === isCompleted) ||
-          (normalizeTitle.includes(normalizeFilter) && completed === !isActive)
-        );
+          (normalizeTitle.includes(normalizeFilter) && completed === !isActive);
+        return allCheckboxMarked;
       });
       setTodos(filteredTodos);
     },
